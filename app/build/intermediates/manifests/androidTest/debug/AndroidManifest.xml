@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.murach.tipcalculator.test">
+    package="com.yanushka.tipcalculator.test">
 
-    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="15" />
+    <uses-sdk android:minSdkVersion="15" android:targetSdkVersion="22" />
 
     <application>
         <uses-library android:name="android.test.runner" />
     </application>
 
     <instrumentation android:name="android.test.InstrumentationTestRunner"
-                     android:targetPackage="com.murach.tipcalculator"
+                     android:targetPackage="com.yanushka.tipcalculator"
                      android:handleProfiling="false"
                      android:functionalTest="false"
-                     android:label="Tests for com.murach.tipcalculator"/>
+                     android:label="Tests for com.yanushka.tipcalculator"/>
 </manifest>

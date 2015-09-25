@@ -1,4 +1,4 @@
-package com.murach.tipcalculator;
+package com.yanushka.tipcalculator;
 
 import android.annotation.SuppressLint;
 
@@ -8,7 +8,7 @@ import java.util.Date;
 
 public class Tip {
 
-    private long id;
+    private int id;
     private long dateMillis;
     private float billAmount;
     private float tipPercent;
@@ -20,18 +20,18 @@ public class Tip {
         setTipPercent(.15f);
     }
 
-    public Tip(long id, long dateMillis, float billAmount, float tipPercent) {
+    public Tip(int id, long dateMillis, float billAmount, float tipPercent) {
         this.setId(id);
         this.setDateMillis(dateMillis);
         this.setBillAmount(billAmount);
         this.setTipPercent(tipPercent);
     }
 
-	public long getId() {
+	public int getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+	public void setId(int id) {
 		this.id = id;
 	}
 

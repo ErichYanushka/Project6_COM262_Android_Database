@@ -1,9 +1,13 @@
-package com.murach.tipcalculator;
+package com.yanushka.tipcalculator;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
+import java.util.List;
 
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -33,12 +37,16 @@ implements OnEditorActionListener, OnClickListener {
     
     // set up preferences
     private SharedPreferences prefs;
+
+    DB db;
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tip_calculator);
-        
+
+        db = new DB(this, null, null, 1);
+
         // get references to the widgets
         billAmountEditText = (EditText) findViewById(R.id.billAmountEditText);
         percentTextView = (TextView) findViewById(R.id.percentTextView);
@@ -53,7 +61,7 @@ implements OnEditorActionListener, OnClickListener {
         percentDownButton.setOnClickListener(this);
         
         // get default SharedPreferences object
-        prefs = PreferenceManager.getDefaultSharedPreferences(this);        
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
     }
     
     @Override
@@ -70,6 +78,24 @@ implements OnEditorActionListener, OnClickListener {
     @Override
     public void onResume() {
         super.onResume();
+
+        ArrayList<Tip> dbList = db.getTips();
+        String log = "";
+
+        for(Tip t : dbList){
+            log += "ID: " + t.getId() + "  Date: " + t.getDateStringFormatted() + " Bill Amount: " +
+                    t.getBillAmountFormatted() + " Tip Percent: " + t.getTipPercentFormatted() + "\n";
+        }
+
+        Log.i("TipCalculatorActivity", log);
+
+        float average = db.averageFloat();
+        Tip t = db.lastTip();
+        String newLog = "Last Tip ID: " + t.getId() + "  Date: " + t.getDateStringFormatted() + " Bill Amount: " +
+                t.getBillAmountFormatted() + " Tip Percent: " + t.getTipPercentFormatted() +
+                " Average Tip: " + average;
+        Log.i("TipCalculatorActivity", newLog);
+
         
         // get the instance variables
         billAmountString = prefs.getString("billAmountString", "");
@@ -128,5 +154,18 @@ implements OnEditorActionListener, OnClickListener {
             calculateAndDisplay();
             break;
         }
+    }
+
+    public void saveTip(View v){
+            Tip tip = new Tip();
+            tip.setBillAmount(Float.parseFloat(billAmountEditText.getText().toString()));
+            tip.setDateMillis(System.currentTimeMillis());
+            tip.setTipPercent(Float.parseFloat(percentTextView.getText().toString()));
+            db.addTip(tip);
+
+            float average = db.averageFloat();
+            percentTextView.setText(Float.toString(average));
+            billAmountEditText.setText("");
+            calculateAndDisplay();
     }
 }
